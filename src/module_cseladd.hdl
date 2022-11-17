@@ -1,0 +1,14 @@
+module top_module(
+    input [31:0] a,
+    input [31:0] b,
+    output [31:0] sum
+);
+   wire 	  add16_cout_1, add16_cout_2, add16_cout_3;
+   wire  [15:0]   add16_output_2, add16_output_3;
+   add16 instance1 (a[15:0],b[15:0], 0, sum[15:0], add16_cout_1);
+   add16 instance2 (a[31:16],b[31:16], 0, add16_output_2, add16_cout_2);
+   add16 instance3 (a[31:16],b[31:16], 1, add16_output_3, add16_cout_3);
+
+   assign sum[31:16] = add16_cout_1 ? add16_output_3 : add16_output_2;
+   
+endmodule

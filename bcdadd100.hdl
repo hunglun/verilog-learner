@@ -1,0 +1,29 @@
+module top_module( 
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+
+   wire [98:0]    carries;
+   
+   bcd_fadd bcd_fadd_100 [99:0] (.a(a), 
+		       .b(b), 
+                       .cin({carries, cin}),
+		       .sum(sum),
+		       .cout({cout,carries})
+		       );
+   
+
+endmodule
+
+
+module top_module(
+    input a,
+    input b,
+    input c,
+    output out  ); 
+
+   assign out = (a | b | c) ? 1 : 0;
+   
+endmodule // top_module
+
