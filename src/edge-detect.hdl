@@ -1,0 +1,273 @@
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   reg [7:0] 	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	pedge = in;	
+     end
+
+endmodule
+// pedge is not reset to 0, after detection
+
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   reg [7:0] 	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else		   
+	  pedge = in;
+     end
+
+endmodule
+
+
+
+// it is reset to 0, but then pedge set back to 1, when in remain high for a long period of time.
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   reg [7:0] 	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else		   
+	  pedge = in & pedge;
+     end
+
+endmodule
+
+// over do it. now pedge is always 0.
+
+
+
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   reg [7:0] 	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else begin
+	   if (edgedetected == 8'b00000000 && in != 8'b00000000 )
+	     begin
+		pedge = in;
+		edgedetected = in;
+	     end
+	   else begin
+	      if (in == 8'b00000000)
+		edgedetected = 0;
+	   end
+	end	
+     end
+
+endmodule
+
+// better!
+// however, it fails at time 160!
+
+
+
+
+module sub_module (
+    input clk,
+    input  in,
+    output  pedge
+);
+   reg  	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else begin
+	   if (|edgedetected == 0  && |in == 1 )
+	     begin
+		pedge = in;
+		edgedetected = in;
+	     end
+	   else begin
+	      if (|in == 0)
+		edgedetected = 0;
+	   end
+	end	
+     end
+endmodule
+// simplify
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   sub_module  instances [7:0] ({8{clk}}, in, pedge); 
+endmodule
+
+
+
+
+
+
+
+
+
+
+
+module sub_module (
+    input clk,
+    input  in,
+    output  pedge
+);
+   reg  	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else begin
+	   if (in) // positive input edge
+	     begin
+		if (|edgedetected == 0) // not detected before
+		  begin
+		     pedge = in;
+		     edgedetected = in;
+		  end
+	     end
+	   else begin
+		edgedetected = 0; // reset edgedetected
+	   end
+	end	
+     end
+endmodule
+
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   sub_module  instances [7:0] ({8{clk}}, in, pedge); 
+endmodule
+
+
+// better!
+
+
+
+module sub_module (
+    input clk,
+    input  in,
+    output  pedge
+);
+   reg  	 edgedetected    ;
+   reg           already_set ;
+   
+   always @(in) begin
+      edgedetected = in;
+   end
+
+   always @(posedge clk) 
+     begin
+	if (pedge) begin 
+	   pedge = 0;
+	   end
+	else begin
+	   if (edgedetected) pedge = 1;	   
+	end	
+     end
+endmodule
+
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   sub_module  instances [7:0] ({8{clk}}, in, pedge); 
+endmodule
+// worse
+
+0x24 = 0010 0100
+0x81 = 1000 0001
+0x9  = 0000 1001       
+0x63 = 0110 0011
+0xd  = 0000 1101       
+
+
+module sub_module (
+    input clk,
+    input  in,
+    output  pedge
+);
+   reg  	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	   if (in) // positive input edge
+	     begin
+		if (|edgedetected == 0) // not detected before
+		  begin
+		     pedge = in ^ pedge;
+		     edgedetected = in;
+		  end
+	     end
+	   else begin
+		edgedetected = 0; // reset edgedetected
+	   end
+     end
+endmodule
+
+
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] pedge
+);
+   sub_module  instances [7:0] ({8{clk}}, in, pedge); 
+endmodule
+
+// much worse
+
+
+module sub_module (
+    input clk,
+    input  in,
+    output  pedge
+);
+   reg  	 edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+	if (pedge) pedge = 0;
+	else begin
+	   if (in) // positive input edge
+	     begin
+		if (edgedetected == 0) // not detected before
+		  begin
+		     pedge = 1;
+		     edgedetected = 1;
+		  end
+	     end
+	   else begin
+		edgedetected = 0; // reset edgedetected
+	   end
+	end	
+     end
+endmodule
+
+// no improvement
