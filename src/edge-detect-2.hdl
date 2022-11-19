@@ -1,0 +1,41 @@
+module top_module (
+    input clk,
+    input [7:0] in,
+    output [7:0] anyedge
+);
+   reg [7:0]		 positive_edge;
+   reg [7:0]		 negative_edge;
+   
+   detect_rising_edge_module instance1 (clk, in, positive_edge);
+   detect_rising_edge_module instance2 (clk, ~in, negative_edge);
+
+   assign anyedge = positive_edge | negative_edge;
+
+endmodule
+
+module detect_rising_edge_module (
+		   input 	clk,
+		   input [7:0] 	in,
+		   output [7:0] pedge
+		   );
+   sub_module  instances [7:0] ({8{clk}}, in, pedge); 
+endmodule
+
+module sub_module (
+		   input  clk,
+		   input  in,
+		   output pedge
+		   );
+   reg 			  edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+        if(!in) edgedetected = 0; 
+        if (pedge) 
+          pedge = 0;        
+	else begin
+	   if (in && !edgedetected) // positive input edge
+	     {pedge,edgedetected} = 2'b11;
+	end	
+     end
+endmodule
