@@ -10,26 +10,28 @@ module top_module (
 
    // reset_occured will become 1, one clock cycle after the fact.
    // stay 1 for one clock cycle, before becoming 0 again.
-   detect_rising_edge1 dre1a (clk, 1, reset, reset_occurred);
-   detect_rising_edge8 dre8b (clk, reset, ~in, input_fell);
+   detect_change_in_edge1 dre1a (clk, 1, reset, reset_occurred);
+
+   
+   detect_change_in_edge8 dre8b (clk, reset, ~in, input_fell);
 
    assign out = reset_occurred ?  0 : input_fell ;
    
 
 endmodule // top_module
 
-module detect_rising_edge8 (
+module detect_change_in_edge8 (
 		   input 	clk,
 		   input 	reset,
 		   input [7:0] 	in,
 		   output [7:0] pedge
 		   );
-   detect_rising_edge1  instances [7:0] ({8{clk}}, {8{reset}}, in, pedge); 
+   detect_change_in_edge1  instances [7:0] ({8{clk}}, {8{reset}}, in, pedge); 
 endmodule
 
 // pedge is set to positive, when in rises.
 // positive pedge remain positive, until reset occurs.
-module detect_rising_edge1 (
+module detect_change_in_edge1 (
 		   input  clk,
 		   input  reset,
 		   input  in,
