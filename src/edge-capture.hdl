@@ -1,53 +1,74 @@
 module top_module (
-    input clk,
-    input reset,
-    input [31:0] in,
-    output [31:0] out
-);
+		   input 	 clk,
+		   input 	 reset,
+		   input [31:0]  in,
+		   output [31:0] out
+		   );
 
-   wire 	  reset_occurred;
-   wire [7:0] 	  input_fell;
+   wire 			 reset_occurred;
+   wire [7:0] 			 input_fell;
 
    // reset_occured will become 1, one clock cycle after the fact.
    // stay 1 for one clock cycle, before becoming 0 again.
-   detect_change_in_edge1 dre1a (clk, 1, reset, reset_occurred);
-
-   
-   detect_change_in_edge8 dre8b (clk, reset, ~in, input_fell);
+   detect_rising_edge1 dre1a (clk, 1, reset, reset_occurred);
+   detect_falling_edge8 dre8b (clk, reset, in, input_fell);
 
    assign out = reset_occurred ?  0 : input_fell ;
    
 
 endmodule // top_module
 
-module detect_change_in_edge8 (
-		   input 	clk,
-		   input 	reset,
-		   input [7:0] 	in,
-		   output [7:0] pedge
-		   );
-   detect_change_in_edge1  instances [7:0] ({8{clk}}, {8{reset}}, in, pedge); 
+module detect_falling_edge8 (
+			     input 	  clk,
+			     input 	  reset,
+			     input [7:0]  in,
+			     output [7:0] pedge
+			     );
+   detect_falling_edge1  instances [7:0] ({8{clk}}, {8{reset}}, in, pedge); 
 endmodule
 
-// pedge is set to positive, when in rises.
-// positive pedge remain positive, until reset occurs.
-module detect_change_in_edge1 (
-		   input  clk,
-		   input  reset,
-		   input  in,
-		   output pedge
-		   );
-   reg 			  edgedetected    ;
+// pedge is set to high, when in rises.
+// pedge remain high, until reset occurs.
+module detect_rising_edge1 (
+			    input  clk,
+			    input  reset,
+			    input  in,
+			    output pedge
+			    );
+   reg 				   edgedetected    ;
 
    always @(posedge clk) 
      begin
         if(!in) edgedetected = 0; 
         if (reset & pedge) begin
-          pedge = 0;
+           pedge = 0;
 	   
-	   end
+	end
 	else begin
 	   if (in && !edgedetected) // positive input edge
+	     {pedge,edgedetected} = 2'b11;
+	end	
+     end
+endmodule
+
+// pedge is set to high, when in falls.
+// pedge remain high, until reset occurs.
+module detect_falling_edge1 (
+			     input  clk,
+			     input  reset,
+			     input  in,
+			     output pedge
+			     );
+   reg 				    edgedetected    ;
+
+   always @(posedge clk) 
+     begin
+        if(in) edgedetected = 0; 
+        if (reset & pedge) begin
+           pedge = 0;	   
+	end
+	else begin
+	   if (!in && !edgedetected) // low
 	     {pedge,edgedetected} = 2'b11;
 	end	
      end
