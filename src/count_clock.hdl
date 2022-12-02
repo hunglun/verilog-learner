@@ -1,0 +1,56 @@
+module top_module(
+    input clk,
+    input reset,
+    input ena,
+    output pm,
+    output [7:0] hh,
+    output [7:0] mm,
+    output [7:0] ss); 
+
+   wire 	 fix_h;
+   
+   always @(posedge clk) begin
+      if (reset) begin
+	 pm = 0;
+	 hh = 8'h12;
+	 mm = 8'h00;
+	 ss = 8'h00;
+      end
+      else begin
+	 if (ena) begin
+	    pm = (ss==8'h59 && mm == 8'h59 && hh == 8'h11 )? !pm : pm;	    
+
+	    if ( hh == 8'h12 && mm == 8'h59 && ss == 8'h59) begin
+	       hh[7:4] = 0;	       
+	       fix_h = 1;	       
+	    end
+	    else begin
+	       fix_h = 0;
+	       if  (hh == 8'h09 && mm == 8'h59 && ss == 8'h59) begin
+		  hh[7:4] =  1;		  
+	       end 
+	    end
+
+	    if (hh[7:4] == 1 ) begin
+	       hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0]) % 2 + 1 : hh[3:0];	    
+	    end
+	    else begin
+	       if (fix_h) begin
+		  hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0] + 1) % 2 : hh[3:0];
+	       end
+	       else begin
+		  hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0] + 1) % 10 : hh[3:0];
+	       end
+	    end
+
+	    mm[7:4] = (mm[3:0] == 9 && ss == 8'h59 ) ? (mm[7:4] + 1) % 6 : mm[7:4];	    
+	    mm[3:0] = (ss == 8'h59) ? (mm[3:0] + 1) % 10 : mm[3:0];	    
+
+	    ss[7:4] = (ss[3:0] == 9 ) ? (ss[7:4] + 1) % 6 : ss[7:4];	    
+	    ss[3:0] = (ss[3:0] + 1) % 10;	    
+
+
+	 end
+      end
+   end
+endmodule
