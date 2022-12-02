@@ -1,6 +1,6 @@
 module top_module(
     input clk,
-    input reset,    // Active-high synchronous reset to 5'h1
+    input reset,    // Active-high synchronous reset to 5'b00001
     output [4:0] q
 ); 
 
