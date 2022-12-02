@@ -6,8 +6,6 @@ module top_module(
     output [7:0] hh,
     output [7:0] mm,
     output [7:0] ss); 
-
-   wire 	 fix_h;
    
    always @(posedge clk) begin
       if (reset) begin
@@ -20,27 +18,22 @@ module top_module(
 	 if (ena) begin
 	    pm = (ss==8'h59 && mm == 8'h59 && hh == 8'h11 )? !pm : pm;	    
 
-	    if ( hh == 8'h12 && mm == 8'h59 && ss == 8'h59) begin
-	       hh[7:4] = 0;	       
-	       fix_h = 1;	       
-	    end
-	    else begin
-	       fix_h = 0;
-	       if  (hh == 8'h09 && mm == 8'h59 && ss == 8'h59) begin
-		  hh[7:4] =  1;		  
-	       end 
-	    end
-
-	    if (hh[7:4] == 1 ) begin
-	       hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0]) % 2 + 1 : hh[3:0];	    
-	    end
-	    else begin
-	       if (fix_h) begin
-		  hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0] + 1) % 2 : hh[3:0];
-	       end
-	       else begin
-		  hh[3:0] = (mm == 8'h59 && ss == 8'h59) ? (hh[3:0] + 1) % 10 : hh[3:0];
-	       end
+	    if ( mm == 8'h59 && ss == 8'h59) begin
+	        case(hh)
+		  8'h01 : hh =8'h02;		  
+		  8'h02 : hh =8'h03;
+		  8'h03 : hh =8'h04;		  
+		  8'h04 : hh =8'h05;
+		  8'h05 : hh =8'h06;		  
+		  8'h06 : hh =8'h07;
+		  8'h07 : hh =8'h08;		  
+		  8'h08 : hh =8'h09;
+		  8'h09 : hh =8'h10;		  
+		  8'h10 : hh =8'h11;
+		  8'h11 : hh =8'h12;
+		  8'h12 : hh =8'h01;
+		  default : hh = hh;		  
+		endcase
 	    end
 
 	    mm[7:4] = (mm[3:0] == 9 && ss == 8'h59 ) ? (mm[7:4] + 1) % 6 : mm[7:4];	    

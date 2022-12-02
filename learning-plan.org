@@ -157,8 +157,8 @@ endmodule
     CLOCK: [2022-11-08 Sel 05:55]--[2022-11-08 Sel 06:06] =>  0:11
     CLOCK: [2022-11-07 Sen 11:21]--[2022-11-07 Sen 12:20] =>  0:59
     :END:
-*** TODO Sequential Logic
-    SCHEDULED: <2022-12-02 Fri>
+*** DONE Sequential Logic
+    CLOSED: [2022-12-02 Fri 10:29] SCHEDULED: <2022-12-02 Fri>
     :PROPERTIES:
     :Effort:   300
     :END:
@@ -200,8 +200,10 @@ endmodule
    CLOCK: [2022-11-18 Fri 08:16]
    :END:
 
+*** TODO shift register (13 sittings)
+    SCHEDULED: <2022-12-02 Fri>
+
 *** TODO Larger Circuit
-    SCHEDULED: <2022-11-19 Sat>
     :PROPERTIES:
     :Effort:   120
     :END:
