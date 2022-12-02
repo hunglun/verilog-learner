@@ -1,0 +1,38 @@
+module top_module (
+    input clk,
+    input reset,   // Synchronous active-high reset
+    output [3:1] ena,
+    output [15:0] q);
+
+   wire 	 c_reset ;
+   wire [3:0] 	 q0,q1,q2,q3;
+
+   assign c_reset = reset | ( q[3:0]==9 && q[7:4] == 9 && q[11:8] == 9 && q[15:12] == 9);
+   assign ena[1] = q[3:0] == 9;
+   assign ena[2] = q[7:4] == 9 && q[3:0] == 9;
+   assign ena[3] = q[11:8] == 9 && q[7:4] == 9 && q[3:0] == 9;   
+   
+   single_digit_counter(clk, c_reset, 1,q[3:0] );   
+   single_digit_counter(clk, c_reset, ena[1], q[7:4]);
+   single_digit_counter(clk, c_reset, ena[2],q[11:8]);
+   single_digit_counter(clk, c_reset, ena[3], q[15:12]);
+   
+endmodule
+
+module single_digit_counter (
+ input 	clk,
+ input 	reset,
+ input 	enable,
+ output [3:0] q);
+
+   always @(posedge clk) begin
+      if (reset ) begin
+	 q = 0;
+      end
+      else begin
+	 q = enable ? (q + 1) % 10 : q;      
+      end
+   end
+
+endmodule
+   
