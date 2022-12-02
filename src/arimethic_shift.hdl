@@ -10,8 +10,8 @@ module top_module(
       if (load) q <= data;
       else begin
 	 if(ena) begin
-	    if (amount == 2'b00) q <= (q * 2);
-	    if (amount == 2'b01) q <= (q * 2 * 2 * 2 * 2  * 2 * 2 * 2 * 2);
+	    if (amount == 2'b00) q <= (q <<< 1);
+	    if (amount == 2'b01) q <= (q <<< 8);
          if (amount == 2'b10) q <= {q[63],q[63:1]} ;
          if (amount == 2'b11) q <= {q[63],{7{q[63]}},q[63:8]} ;
 
