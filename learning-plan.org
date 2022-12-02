@@ -197,7 +197,8 @@ endmodule
    :Effort:   120
    :END:
    :LOGBOOK:
-   CLOCK: [2022-11-18 Fri 08:16]
+   CLOCK: [2022-12-02 Fri 11:02]--[2022-12-02 Fri 11:10] =>  0:08
+   CLOCK: [2022-12-02 Fri 11:02]--[2022-12-02 Fri 11:02] =>  0:00
    :END:
 
 *** TODO shift register (13 sittings)
