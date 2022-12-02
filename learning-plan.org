@@ -1,0 +1,229 @@
+* Objective
+Learn FPGA to replace firmware
+* Milestone
+1 month : get started, 2022-11-05 Sab
+3 month : familiar
+6 month : completed
+* Quora Advice
+I would highly recommend not doing this via some AWS or online service
+where you can’t see what you’re doing and your access to the FPGA
+necessarily has to be controlled by intermediate layers of software.
+
+
+Buy a cheap development kit board like a Papilio or one of the
+Digilent hobbyist boards. Then you’ll genuinely be able to work with
+it with full access to the hardware, blink some LEDs, and do whatever
+else you want with them.
+
+
+I started as a hobbyist myself and eventually moved on to some
+relatively low-level (i.e. not super-complicated) professional work,
+in addition to other duties I had at the time. I have continued to up
+my game in the several years since by experimenting with HLS in C++,
+embedding processors into my designs and interfacing them with RTL
+IPs, and more advanced topics.
+
+
+[Edit: I am now working in a team at Microsoft responsible for
+creating and deploying a wide variety of FPGA and other accelerated
+IPs for use within Azure and AI services. This is now my career and my
+FPGA knowledge is 100% self-taught.]
+
+
+So you’re probably asking how I learned all this stuff. The short
+answer is: by diving in headfirst. The Xilinx manuals are voluminous
+but packed with good information and code style tips. Do the online
+Verilog practice problems at hdlbits. Buy Pong Chu’s intro textbook
+and work through each chapter. This will probably start to give you
+some basis to think up other projects to try on your own.
+
+* Plan
+Phase 1:
+hdlbits - November
+Graduation project : read Q7 FPGA code!
+
+Phase 2:
+Modify Q7 FPGA code and Play with Xilinx Zynq - Dec
+Meanwhile, continue learning with Pong Chu
+
+Phase 3:
+Start a hobby project in SpeQtral! - Jan
+
+* Execution [56%]
+** DONE Solve first HDL problem!
+   SCHEDULED: <2022-11-05 Sab>
+   :PROPERTIES:
+   :Effort:   1
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 09:39]--[2022-11-05 Sab 09:42] =>  0:03
+   :END:
+ 
+** DONE set output to zero
+module top_module( output zero );
+
+// Insert your code here
+    assign zero = 0;
+
+endmodule
+** DONE Basics [100%]
+   SCHEDULED: <2022-11-05 Sab>
+   :PROPERTIES:
+   :Effort:   1
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 09:50]--[2022-11-05 Sab 10:24] =>  0:34
+   :END:
+1. [X] Simple Wire
+2. [X] Four Wires
+3. [X] And
+4. [X] Inverter
+5. [X] Nor
+6. [X] Xnor
+7. [X] Declaring wires
+8. [X] 7458 chip
+*** DONE Simple Wire
+    :PROPERTIES:
+    :Effort:   1
+    :END:
+    :LOGBOOK:
+    CLOCK: [2022-11-05 Sab 09:51]--[2022-11-05 Sab 09:54] =>  0:03
+    :END:
+*** DONE declaring wires
+    :PROPERTIES:
+    :Effort:   0.5
+    :END:
+    :LOGBOOK:
+    CLOCK: [2022-11-05 Sab 10:04]--[2022-11-05 Sab 10:12] =>  0:08
+    :END:
+** DONE Vector
+   :PROPERTIES:
+   :Effort:   30
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 13:16]--[2022-11-05 Sab 13:59] =>  0:43
+   CLOCK: [2022-11-05 Sab 12:56]--[2022-11-05 Sab 13:00] =>  0:04
+   :END:
+
+** DONE Module
+   SCHEDULED: <2022-11-05 Sab>
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 15:08]--[2022-11-05 Sab 16:02] =>  0:54
+   :END:
+** DONE Procedures
+   :PROPERTIES:
+   :Effort:   60
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 19:58]--[2022-11-05 Sab 20:51] =>  0:53
+   :END:
+
+** DONE Modules again ( involves multiplexer)
+   :PROPERTIES:
+   :Effort:   60
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-05 Sab 20:52]--[2022-11-05 Sab 21:15] =>  0:23
+   :END:
+
+** DONE More Verilog Features
+   SCHEDULED: <2022-11-06 Min>
+   :PROPERTIES:
+   :Effort:   120
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-06 Min 08:11]--[2022-11-06 Min 09:17] =>  1:06
+   :END:
+   
+** DONE Circuits
+   :PROPERTIES:
+   :Effort:   20
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-07 Sen 02:10]--[2022-11-07 Sen 02:20] =>  0:10
+   CLOCK: [2022-11-06 Min 12:23]--[2022-11-06 Min 12:40] =>  0:17
+   :END:
+*** DONE Basic Gates
+    SCHEDULED: <2022-11-06 Min>
+
+*** DONE Other Combinational Logic
+    SCHEDULED: <2022-11-07 Sen>
+    :PROPERTIES:
+    :Effort:   180
+    :END:
+    :LOGBOOK:
+    CLOCK: [2022-11-08 Sel 10:57]--[2022-11-08 Sel 11:45] =>  0:48
+    CLOCK: [2022-11-08 Sel 06:06]--[2022-11-08 Sel 06:46] =>  0:40
+    CLOCK: [2022-11-08 Sel 05:55]--[2022-11-08 Sel 06:06] =>  0:11
+    CLOCK: [2022-11-07 Sen 11:21]--[2022-11-07 Sen 12:20] =>  0:59
+    :END:
+*** TODO Sequential Logic
+    SCHEDULED: <2022-12-02 Fri>
+    :PROPERTIES:
+    :Effort:   300
+    :END:
+    :LOGBOOK:
+    CLOCK: [2022-11-17 Thu 20:47]--[2022-11-17 Thu 23:47] =>  3:00
+    CLOCK: [2022-11-10 Thu 17:49]--[2022-11-10 Thu 18:03] =>  0:14
+    CLOCK: [2022-11-09 Wed 08:24]--[2022-11-09 Wed 08:24] =>  0:00
+    CLOCK: [2022-11-09 Wed 07:58]--[2022-11-09 Wed 08:11] =>  0:13
+    CLOCK: [2022-11-09 Rab 01:24]--[2022-11-09 Rab 01:53] =>  0:29
+    :END:
+**** DONE revise to learn more about circuit diagrams
+    SCHEDULED: <2022-11-09 Wed>
+    :PROPERTIES:
+    :Effort:   60
+    :END:
+    :LOGBOOK:
+    CLOCK: [2022-11-09 Wed 08:13]--[2022-11-09 Wed 08:15] =>  0:02
+    :END:
+**** DONE DFF and Gate
+    SCHEDULED: <2022-11-09 Wed>
+    :PROPERTIES:
+    :Effort:   30
+    :END:
+**** DONE Create circuit from truth table
+     SCHEDULED: <2022-11-12 Sat>
+     :PROPERTIES:
+     :Effort:   60
+     :END:
+     :LOGBOOK:
+     CLOCK: [2022-11-12 Sat 10:14]--[2022-11-12 Sat 10:34] =>  0:20
+     CLOCK: [2022-11-12 Sat 10:23]--[2022-11-12 Sat 10:34] =>  0:11
+     :END:
+**** DONE solve edge detection!
+   SCHEDULED: <2022-11-18 Fri>
+   :PROPERTIES:
+   :Effort:   120
+   :END:
+   :LOGBOOK:
+   CLOCK: [2022-11-18 Fri 08:16]
+   :END:
+
+*** TODO Larger Circuit
+    SCHEDULED: <2022-11-19 Sat>
+    :PROPERTIES:
+    :Effort:   120
+    :END:
+** TODO Reading Simulations
+   SCHEDULED: <2022-11-20 Sun>
+   :PROPERTIES:
+   :Effort:   120
+   :END:
+** TODO Writing Testbenches
+   SCHEDULED: <2022-11-19 Sat>
+   :PROPERTIES:
+   :Effort:   120
+   :END:
+** TODO CS450
+   SCHEDULED: <2022-11-20 Sun>
+   :PROPERTIES:
+   :Effort:   300
+   :END:
+** TODO Read FPGA Q7 Code
+   SCHEDULED: <2022-11-18 Fri>
+** TODO Modify FPGA Q7 Code and test using Oscilloscope!
+   SCHEDULED: <2022-11-18 Fri>
+** TODO Start a project in SpeQtral!
+** TODO Books
+[[https://www.amazon.com/Starters-Guide-Verilog-Michael-Ciletti/dp/0131415565][Starter's Guide to Verilog 2001]]
