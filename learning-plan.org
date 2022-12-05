@@ -201,13 +201,16 @@ endmodule
    CLOCK: [2022-12-02 Fri 11:02]--[2022-12-02 Fri 11:02] =>  0:00
    :END:
 
-*** TODO shift register (13 sittings)
-    SCHEDULED: <2022-12-02 Fri>
+*** DONE shift register (13 sittings)
+    CLOSED: [2022-12-04 Sun 23:51] SCHEDULED: <2022-12-02 Fri>
 
-*** TODO Larger Circuit
+
+*** DONE Larger Circuit
+    CLOSED: [2022-12-04 Sun 23:51]
     :PROPERTIES:
     :Effort:   120
     :END:
+*** TODO FSM
 ** TODO Reading Simulations
    SCHEDULED: <2022-11-20 Sun>
    :PROPERTIES:
