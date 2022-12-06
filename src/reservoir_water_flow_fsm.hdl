@@ -8,35 +8,35 @@ module top_module (
 		   output      dfr
 		   ); 
 
-   parameter nL0=0,nL1=1,nL2=2,nL3=3,L0=4,L1=5,L2=6;
+   parameter L0=3'b000,L1=3'b001,L2=3'b010,L3=3'b011;   
    
-   reg [2:0] 		       state, next_state;
+   reg [2:0] 		      prev_state, state, next_state;
    
    // State transition logic
    always@(*) begin
       next_state =  state;
       case(state)
-	nL0: next_state = s[1] ? nL1 : nL0 ;
-	nL1: next_state = s[2] ? nL2 : (!s[1]? L1 : nL1) ;
-	nL2: next_state = s[3] ? nL3 : (!s[2]? L2 : nL2) ;
-	nL3: next_state = !s[3] ? L2 : nL3;	
-	L0: next_state = s[1] ? nL1 : L0 ;
-	L1: next_state = s[2] ? nL2 : L1 ;
-	L2: next_state = s[3] ? nL3 : L2 ;
+	L0: next_state = s[1] ? L1 : L0 ;
+	L1: next_state = s[2] ? L2 : (!s[1] ? L0 : L1) ;
+	L2: next_state = s[3] ? L3 : (!s[2] ? L1 : L2) ;
+	L3: next_state = !s[3] ? L2 : L3;	
       endcase // case (state)
       
    end
    // State flip-flops with asynchronous reset
    always @(posedge clk) begin    // This is a sequential always block
       // State flip-flops with asynchronous reset
-      if (reset) state <= nL0;
-      else state <= next_state;       
+      if (reset) state <= L0;
+      else begin
+	 prev_state <= state;	 
+	 state <= next_state;
+      end
    end
 
    // Output logic
-   assign fr3 = state == L0 | state == nL0;
-   assign fr2 = state == L0 | state == nL0 | state == L1 | state == nL1;   
-   assign fr1 = state == L0 | state == nL0 | state == L1 | state == nL1 | state == nL2 | state == L2;   
-   assign dfr = state == L0 | state == L1 | state == L2;   
+   assign fr3 = state == L0;   
+   assign fr2 = state == L0 | state == L1;
+   assign fr1 = state == L0 | state == L1 | state == L2;
+   assign dfr = prev_state >= state;   
    
 endmodule
