@@ -1,3 +1,5 @@
+//it is possible to create this FSM without additional prev_state!
+//add more states!  
 module top_module (
 		   input       clk,
 		   input       reset,
@@ -26,7 +28,9 @@ module top_module (
    // State flip-flops with asynchronous reset
    always @(posedge clk) begin    // This is a sequential always block
       // State flip-flops with asynchronous reset
-      if (reset) state <= L0;
+      if (reset) begin
+	 state <= L0;
+      end
       else begin
 	 prev_state <= state;	 
 	 state <= next_state;
@@ -37,6 +41,7 @@ module top_module (
    assign fr3 = state == L0;   
    assign fr2 = state == L0 | state == L1;
    assign fr1 = state == L0 | state == L1 | state == L2;
-   assign dfr = prev_state >= state;   
+   assign dfr = state == L0 | ((prev_state > state ) ? 1 :(( prev_state < state) ? 0 : dfr));
+   
    
 endmodule
