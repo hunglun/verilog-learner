@@ -1,0 +1,34 @@
+module top_module(
+    input clk,
+    input in,
+    input reset,    // Synchronous reset
+    output done
+); 
+   parameter IDLE=0, START=1, 
+     D0=2,D1=3,D2=4,D3=5,D4=6,D5=7,D6=8,D7=9,
+     PEND_STOP=10, STOP=11;
+   reg [11:0] state, next_state;
+   
+   assign next_state[IDLE] = ( state[IDLE] & in ) | (state[STOP] & in) | (state[PEND_STOP] & in );
+   assign next_state[START] = ( state[IDLE] & !in ) | (state[STOP] & !in) ;   
+   assign next_state[D0] = state[START];
+   assign next_state[D1] = state[D0];
+   assign next_state[D2] = state[D1];
+   assign next_state[D3] = state[D2];
+   assign next_state[D4] = state[D3];
+   assign next_state[D5] = state[D4];
+   assign next_state[D6] = state[D5];
+   assign next_state[D7] = state[D6];   
+   assign next_state[PEND_STOP] = (state[PEND_STOP] | state[D7]) & !in  ;
+   assign next_state[STOP] = state[D7] & in  ;
+   
+   always @(posedge clk) begin
+      if(reset) state <= {{11{1'b0}},1'b1};
+      else begin 
+	 state <= next_state;
+	 end 
+   end
+
+   assign done =  state[STOP];
+   
+endmodule
