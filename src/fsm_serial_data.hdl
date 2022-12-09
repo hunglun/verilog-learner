@@ -11,8 +11,8 @@ module top_module(
    reg [11:0] state, next_state;
    reg [8:0]  out_reg; // last bit is always 1 because of stop state.
    
-   assign next_state[IDLE] = ( state[IDLE] & in ) | (state[STOP] & in) | (state[PEND_STOP] & in );
-   assign next_state[START] = ( state[IDLE] & !in ) | (state[STOP] & !in) ;   
+   assign next_state[IDLE]  = ( state[IDLE] | state[STOP] | state[PEND_STOP] ) & in;
+   assign next_state[START] = ( state[IDLE] | state[STOP] ) & !in ;   
    assign next_state[D0] = state[START];
    assign next_state[D1] = state[D0];
    assign next_state[D2] = state[D1];
@@ -25,7 +25,7 @@ module top_module(
    assign next_state[STOP] = state[D7] & in  ;
    
    always @(posedge clk) begin
-      if(reset) state <= {{11{1'b0}},1'b1};
+      if(reset) state <= 1;      
       else begin 
 	 state <= next_state;
 	 out_reg <= {in,out_reg[8:1]};	 
