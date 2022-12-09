@@ -33,5 +33,5 @@ module top_module(
    end
 
    assign done =  state[STOP];
-   assign out_byte = state[STOP] ? out_reg[7:0] : {8{1'b0}};   
+   assign out_byte = done ? out_reg[7:0] : {8{1'b0}};   
 endmodule
