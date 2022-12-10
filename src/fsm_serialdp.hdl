@@ -54,10 +54,12 @@ module top_module(
 	 end 
    end
 
-   assign done =  (state == STOP) & !odd;
+   assign done =  (state == STOP) & ~odd;
    
    assign out_byte =  done ? out_reg[7:0] : {3'b000,odd,state};
 
-   parity instance1(.clk(clk),.reset(state == START),.in(in), .odd(odd));
+   // reset when idle. transition from idle to start has in == 0, having no
+   // impact on the odd reg.
+   parity instance1(.clk(clk),.reset(state == IDLE | state == STOP),.in(in), .odd(odd));
    
 endmodule
