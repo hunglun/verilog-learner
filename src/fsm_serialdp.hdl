@@ -5,24 +5,27 @@ module top_module(
     output [7:0] out_byte,
     output 	 done
 ); 
-   parameter IDLE=0, 
-     START=1, 
-     D0=2,
-     D1=3,
-     D2=4,
-     D3=5,
-     D4=6,
-     D5=7,
-     D6=8,
-     D7=9,
-     CH=10,
-     PEND_STOP=11, 
-     STOP=12;
+   parameter  
+     D0=0,
+     D1=1,
+     D2=2,
+     D3=3,
+     D4=4,
+     D5=5,
+     D6=6,
+     D7=7,
+     CH=8,
+     STOP=9,
+     IDLE=10, 
+     START=11,
+     PEND_STOP=12;
+   
    reg [3:0] state, next_state;
    reg [9:0]  out_reg; // last bits are stop bit and parity check in happy case.
    reg 	      odd;
 
    always @(*) begin
+      next_state = state;
       case(state)
 	IDLE : next_state = in ? IDLE: START;
 	START: next_state = D0;	
@@ -40,17 +43,21 @@ module top_module(
       endcase
    end
 
-   parity instance1(.clk(clk),.reset(reset | state == START),.in(in), .odd(odd));
    
    always @(posedge clk) begin
-      if(reset) state <= IDLE;      
+      if(reset) begin
+         state <= IDLE;
+      end      
       else begin 
 	 state <= next_state;
 	 out_reg <= {in,out_reg[9:1]};	 
 	 end 
    end
 
-   assign done =  state == STOP & !odd;
-   assign out_byte = done ? out_reg[7:0] : 8'b00000000 ;
+   assign done =  (state == STOP) & !odd;
+   
+   assign out_byte =  done ? out_reg[7:0] : {3'b000,odd,state};
+
+   parity instance1(.clk(clk),.reset(state == START),.in(in), .odd(odd));
    
 endmodule
