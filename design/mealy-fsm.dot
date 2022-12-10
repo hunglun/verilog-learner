@@ -1,0 +1,14 @@
+ 
+digraph {
+  /*graph attributes */
+  node [ shape=record];
+  reset -> START
+  START -> a [label = 1];
+  a -> B [label = 0];
+  B -> a [label = 1];
+
+  B -> START [label = 0];
+  START -> START [label = 0];
+  a -> a [ label =1 ];
+  
+}
