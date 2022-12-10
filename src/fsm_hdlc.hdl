@@ -1,0 +1,34 @@
+module top_module(
+    input clk,
+    input reset,    // Synchronous reset
+    input in,
+    output disc,
+    output flag,
+    output err);
+
+   parameter NONE=0, ONE=1,TWO=2,THREE=3,FOUR=4,FIVE=5,SIX=6,ERROR=7,DISCARD=8,FLAG=9;
+   reg [9:0] state, next_state;
+   
+   assign next_state[NONE] = ( state[NONE] | state[ONE] |  state[TWO]| state[THREE] | state[FOUR] 
+			       |state[DISCARD] | state[FLAG] | state[ERROR]) & !in;
+   
+   assign next_state[ONE] = (state[NONE] |state[DISCARD]  | state[FLAG]) & in;
+   assign next_state[TWO] = state[ONE] & in;
+   assign next_state[THREE] = state[TWO] & in;
+   assign next_state[FOUR] = state[THREE] & in;
+   assign next_state[FIVE] = state[FOUR] & in;
+   assign next_state[SIX] = state[FIVE] & in;
+   assign next_state[ERROR] = (state[SIX] | state[ERROR] )& in;
+   assign next_state[DISCARD] = state[FIVE] & ~in;
+   assign next_state[FLAG]  = state[SIX] & ~in;
+
+   always @(posedge clk) begin
+      if(reset) state <= 10'b0000000001;
+      else state <= next_state;      
+   end
+   
+   assign disc = state[DISCARD];
+   assign flag = state[FLAG];
+   assign err= state[ERROR];
+   
+endmodule
